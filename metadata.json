@@ -1,0 +1,5 @@
+{
+  "name": "ClinicFlow Scheduler",
+  "description": "A comprehensive patient appointment calendar with session tracking, financial validation, and automated rescheduling logic.",
+  "requestFramePermissions": []
+}
