@@ -36,6 +36,11 @@ export interface Patient {
   name: string;
   nomenclature: string;
   location: LocationType;
+  address?: string; // For domicile patients
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
   startConfig: {
     startDate: string;
     schedule: ScheduleConfig[];

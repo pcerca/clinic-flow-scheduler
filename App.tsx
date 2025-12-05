@@ -167,10 +167,7 @@ function App() {
     }));
   };
 
-  const handleImportHolidays = async () => {
-    if (!confirm(t.syncConfirm)) {
-      return;
-    }
+  const syncHolidays = async () => {
 
     const year = new Date().getFullYear();
     const nextYear = year + 1;
@@ -211,6 +208,13 @@ function App() {
       return { ...p, sessions: updatedSessions };
     }));
   };
+
+  // Auto-sync holidays if missing
+  useEffect(() => {
+    if (isAuthenticated && Object.keys(holidays).length === 0) {
+      syncHolidays();
+    }
+  }, [isAuthenticated, holidays]);
 
   const openEditPatient = (patient: Patient) => {
     setEditingPatient(patient);
@@ -288,27 +292,10 @@ function App() {
             <Plus className="w-5 h-5 mr-2" /> {t.newPatient}
           </Button>
 
-          <Button onClick={handleImportHolidays} variant="ghost" className="w-full justify-start text-slate-500 hover:text-amber-600 hover:bg-amber-50">
-            <CalendarIcon className="w-5 h-5 mr-2" /> {t.syncHolidays}
-          </Button>
+
         </div>
 
-        <div className="px-6 mb-4 flex items-center justify-between">
-          <div className="flex bg-slate-100 p-1 rounded-xl w-full">
-            <button
-              onClick={() => setLang('en')}
-              className={`flex-1 flex items-center justify-center text-xs font-bold py-1.5 rounded-lg transition-all ${lang === 'en' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-            >
-              EN
-            </button>
-            <button
-              onClick={() => setLang('fr')}
-              className={`flex-1 flex items-center justify-center text-xs font-bold py-1.5 rounded-lg transition-all ${lang === 'fr' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-            >
-              FR
-            </button>
-          </div>
-        </div>
+
 
         {expiringPatients.length > 0 && (
           <div className="mx-4 mb-4 p-4 bg-amber-50 rounded-2xl border border-amber-100">
@@ -388,6 +375,7 @@ function App() {
           onViewModeChange={setViewMode}
           onUpdateSession={handleUpdateSession}
           lang={lang}
+          onLangChange={setLang}
         />
       </main>
 
